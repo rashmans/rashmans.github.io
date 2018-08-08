@@ -3,9 +3,11 @@
 Parsing and extracting data from XML file with XPath.
 The output displays detailed information on all books whose price is higher than 10, which were published after 2005.
 
+***Main.java***
 ```java
-Main.java
-
+/*
+ * Goran Radosavljevic
+ */
 package main;
 
 import java.io.File;
@@ -47,9 +49,8 @@ public class Main {
 
 }
 ```
+***books.xml***
 ```xml
-books.xml
-
 <!DOCTYPE catalog SYSTEM "books.dtd">
 <catalog>
    <book id="bk101">
@@ -171,9 +172,8 @@ books.xml
    </book>
 </catalog>
 ```
+***books.dtd***
 ```xml
-books.dtd
-
 <?xml version='1.0' encoding='UTF-8'?>
 
 <!--
