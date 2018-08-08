@@ -171,7 +171,7 @@ books.xml
    </book>
 </catalog>
 ```
-```java
+```xml
 books.dtd
 
 <?xml version='1.0' encoding='UTF-8'?>
