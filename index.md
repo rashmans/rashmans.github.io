@@ -1,9 +1,9 @@
-### XML parsing with XPath :+1:
+### XML parsing with XPath
 
 Parsing and extracting data from XML file with XPath.
 The output displays detailed information on all books whose price is higher than 10, which were published after 2005.
 
-```xpath
+```java
 
 Main.java
 
@@ -48,6 +48,8 @@ public class Main {
 
 }
 ```
+
+
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
 
