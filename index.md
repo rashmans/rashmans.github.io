@@ -5,9 +5,6 @@ The output displays detailed information on all books whose price is higher than
 
 ***Main.java***
 ```java
-/*
- * Goran Radosavljevic
- */
 package main;
 
 import java.io.File;
