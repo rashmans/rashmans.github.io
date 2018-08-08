@@ -223,11 +223,149 @@ public class Main {
 <!ELEMENT description (#PCDATA)>
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### RESTful Web Service
 
-### Jekyll Themes
+Web service for translating between two languages / Mini Fruit Dictionary
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/rashmans/rashmans.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+***web.xml***
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>RESTFull</display-name>
+ <servlet>
+    <servlet-name>Jersey REST Service</servlet-name>
+    <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+     <!-- Register resources and providers under com.vogella.jersey.first package. -->
+    <init-param>
+        <param-name>jersey.config.server.provider.packages</param-name>
+        <param-value>service</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Jersey REST Service</servlet-name>
+    <url-pattern>/rest/*</url-pattern>
+  </servlet-mapping>
+</web-app>
+```
+***index.html***
+```html
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Mini Fruit Dictionary</title>
+    </head>
+    <body>
+        <h1>Mini Fruit Dictionary</h1>
+        <form>  
+            Enter the word: 
+            <input type="text" name="word" id="word"/> 
+            <button onclick="input()">Translate</button> 
+        </form>  
+        <script>
+            function input() {
+                url = 'http://localhost:8080/RESTfull/rest/MyRestService/' + document.getElementById("word").value;
+                window.open(url, '_blank');
+            }
+        </script>
+    </body>
+</html>
+```
+***translator.xml***
+```xml
+<!DOCTYPE catalog SYSTEM "translator.dtd">
+<translator>  
+    <word en="apple">jabuka</word>  
+    <word en="apricot">kajsija</word>  
+    <word en="avocado">avokado</word>  
+    <word en="banana">banana</word>  
+    <word en="blackcurrant">crna ribizla</word>
+    <word en="blackberry">kupina</word>  
+    <word en="blueberry">borovnica</word>  
+    <word en="cherry">višnja</word>  
+    <word en="coconut">kokos</word>  
+</translator>  
+```
+***MyService.java***
+```java
+package service;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+
+@Path("/MyRestService/{word}")
+public class MyService {
+
+    @GET
+    public String doGet(@PathParam("word") String word) throws XPathExpressionException, FileNotFoundException {
+    String output = null;  
+            
+      XPathFactory factory = XPathFactory.newInstance();  
+      XPath path = factory.newXPath();  
+      XPathExpression xPathExpression = path.compile("//word[@en='"+ word.trim().toLowerCase() +"']");  
+        
+      File xmlDocument = new File("translator.xml");  
+      InputSource inputSource = new InputSource(new FileInputStream(xmlDocument));  
+        
+      Object result = xPathExpression.evaluate(inputSource, XPathConstants.NODESET);  
+      NodeList nodeList = (NodeList)result;  
+        
+      if (nodeList.getLength() < 1) {
+        output = "Word " + word + " does not exist in dictionary";
+      } else {  
+        for (int i = 0; i < nodeList.getLength(); i++) {  
+          output = "Word " + word + " translates as: " + nodeList.item(i).getTextContent();  
+        }  
+      }         
+      return output;       
+    }
+
+}
+```
+***translator.dtd***
+```xml
+<?xml version='1.0' encoding='UTF-8'?>
+
+<!--
+    TODO define vocabulary identification
+    PUBLIC ID: -//vendor//vocabulary//EN
+    SYSTEM ID: http://server/path/translator.dtd
+
+-->
+
+<!--
+    An example how to use this DTD from your XML document:
+
+    <?xml version="1.0"?>
+
+    <!DOCTYPE translator SYSTEM "translator.dtd">
+
+    <translator>
+    ...
+    </translator>
+-->
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT translator (word)*>
+
+<!--- Put your DTDDoc comment here. -->
+<!ELEMENT word (#PCDATA)>
+<!ATTLIST word
+    en CDATA #IMPLIED
+  >
+```
 
 ### Support or Contact
 
