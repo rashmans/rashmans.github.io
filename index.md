@@ -1,3 +1,6 @@
+![Image of Yaktocat](https://scontent.fbeg2-1.fna.fbcdn.net/v/t1.0-9/10173649_848141848546797_93646062551489539_n.jpg?_nc_cat=0&oh=e687ab585abd5d75c40f28dced886f0b&oe=5C0A70B6)
+
+
 ## Welcome to my projects page.
 
 You can use the [editor on GitHub](https://github.com/rashmans/rashmans.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
