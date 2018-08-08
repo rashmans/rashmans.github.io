@@ -4,26 +4,55 @@ You can use the [editor on GitHub](https://github.com/rashmans/rashmans.github.i
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
-### Markdown
+### XML parsing with XPath
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Parsing and extracting data from XML file with XPath.
+The output displays detailed information on all books whose price is higher than 10, which were published after 2005.
 
-```markdown
-Syntax highlighted code block
+```xpath
 
-# Header 1
-## Header 2
-### Header 3
+Main.java
 
-- Bulleted
-- List
+package main;
 
-1. Numbered
-2. List
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
-**Bold** and _Italic_ and `Code` text
+public class Main {
 
-[Link](url) and ![Image](src)
+    public static void main(String[] args) throws XPathExpressionException, FileNotFoundException {
+
+        XPathFactory factory = XPathFactory.newInstance();
+        XPath path = factory.newXPath();
+        XPathExpression xPathExpression = path.compile("//book[price > 10 and translate(publish_date,'-','')>20050000]");
+
+        File xmlDocument = new File("books.xml");
+        InputSource inputSource = new InputSource(new FileInputStream(xmlDocument));
+
+        Object result = xPathExpression.evaluate(inputSource, XPathConstants.NODESET);
+        NodeList nodeList = (NodeList) result;
+
+        for (int i = 0; i < nodeList.getLength(); i++) {
+            System.out.println("Author: " + nodeList.item(i).getFirstChild().getNextSibling().getTextContent());
+            System.out.println("Title: " + nodeList.item(i).getFirstChild().getNextSibling().getNextSibling().getNextSibling().getTextContent());
+            System.out.println("Genre: " + nodeList.item(i).getFirstChild().getNextSibling().getNextSibling().getNextSibling().getNextSibling().getNextSibling().getTextContent());
+            System.out.println("Price: " + nodeList.item(i).getLastChild().getPreviousSibling().getPreviousSibling().getPreviousSibling().getPreviousSibling().getPreviousSibling().getTextContent());
+            System.out.println("Publish date: " + nodeList.item(i).getLastChild().getPreviousSibling().getPreviousSibling().getPreviousSibling().getTextContent());
+            System.out.println("Description: " + nodeList.item(i).getLastChild().getPreviousSibling().getTextContent());
+            System.out.println("");
+        }
+
+    }
+
+}
 ```
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
