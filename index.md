@@ -1,4 +1,4 @@
-### XML parsing with XPath
+### XML parsing with XPath :+1:
 
 Parsing and extracting data from XML file with XPath.
 The output displays detailed information on all books whose price is higher than 10, which were published after 2005.
